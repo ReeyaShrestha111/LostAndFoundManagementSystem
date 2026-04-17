@@ -20,6 +20,6 @@
 <p><a href="${pageContext.request.contextPath}/myLostItems">View My Lost Items</a></p>
 <p><a href="${pageContext.request.contextPath}/myClaims">View My Claims</a></p>
 <%@ include file="footer.jsp" %>
-</div>
-</body>
-</html>
+</div>					
+</body>		
+</html>			
