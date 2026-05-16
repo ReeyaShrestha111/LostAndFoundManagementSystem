@@ -74,7 +74,7 @@ public class RegisterServlet extends HttpServlet {
             stmt.setString(2, userEmail);
             stmt.setString(3, phone);
             stmt.setString(4, studentId);
-            stmt.setString(5, userPassword);
+            stmt.setString(5, com.lostandfound.config.PasswordUtil.hash(userPassword));
 
             int rows = stmt.executeUpdate();
 

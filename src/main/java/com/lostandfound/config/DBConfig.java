@@ -11,7 +11,8 @@ import java.sql.SQLException;
 public class DBConfig {
 
     // Adjust database name to match your actual schema in MySQL
-    private static final String URL      = "jdbc:mysql://localhost:3306/lostfound_db?useSSL=false&serverTimezone=UTC";
+	private static final String Db_Name = "lostfound_db";
+    private static final String URL      = "jdbc:mysql://localhost:3306/"+ Db_Name;
     private static final String USERNAME = "root";       // default XAMPP user
     private static final String PASSWORD = "";           // default XAMPP password (empty)
 
