@@ -38,8 +38,10 @@ public class AdminDashboardServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
+        
 
         UserModel user = (UserModel) session.getAttribute("user");
+        System.out.println(user.getRole());
         if (!"admin".equals(user.getRole())) {
             response.sendRedirect(request.getContextPath() + "/home");
             return;
@@ -99,6 +101,7 @@ public class AdminDashboardServlet extends HttpServlet {
         request.setAttribute("totalItems", totalItems);
         request.setAttribute("pendingItems", pendingItems);
         request.getRequestDispatcher("/WEB-INF/pages/admin_dashboard.jsp").forward(request, response);
+        
     }
 
     @Override
