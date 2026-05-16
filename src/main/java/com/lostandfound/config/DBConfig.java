@@ -7,20 +7,21 @@ import java.sql.SQLException;
 /**
  * DBConfig - Database Configuration Class
  * Handles MySQL connection using JDBC
- * Package: com.lostandfound.config
  */
 public class DBConfig {
 
+    // Adjust database name to match your actual schema in MySQL
     private static final String URL      = "jdbc:mysql://localhost:3306/lostfound_db?useSSL=false&serverTimezone=UTC";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "";  // XAMPP default has no password
+    private static final String USERNAME = "root";       // default XAMPP user
+    private static final String PASSWORD = "";           // default XAMPP password (empty)
 
     public static Connection getConnection() throws SQLException {
         try {
+            // Load MySQL driver
             Class.forName("com.mysql.cj.jdbc.Driver");
             return DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (ClassNotFoundException e) {
-            throw new SQLException("MySQL JDBC Driver not found. Add mysql-connector-java.jar to your project.", e);
+            throw new SQLException("MySQL JDBC Driver not found. Ensure mysql-connector-java.jar is in WEB-INF/lib.", e);
         }
     }
 }

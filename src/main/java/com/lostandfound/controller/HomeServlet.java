@@ -25,8 +25,7 @@ import java.util.List;
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
 
-    // ✅ Added to fix the warning
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; // optional, silences warning
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,7 +41,7 @@ public class HomeServlet extends HttpServlet {
         UserModel user = (UserModel) session.getAttribute("user");
         // Admin should not see member home
         if ("admin".equals(user.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            response.sendRedirect(request.getContextPath() + "/admindashboard");
             return;
         }
 

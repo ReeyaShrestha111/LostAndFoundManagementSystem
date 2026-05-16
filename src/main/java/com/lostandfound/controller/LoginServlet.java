@@ -1,6 +1,7 @@
 package com.lostandfound.controller;
 
 import com.lostandfound.config.DBConfig;
+import com.lostandfound.config.PasswordUtil;
 import com.lostandfound.model.UserModel;
 
 import jakarta.servlet.ServletException;
@@ -16,30 +17,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
- * LoginServlet - Handles user login (GET loads page, POST validates credentials)
+ * LoginServlet - Handles user login
  * URL: /login
  */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-    // ✅ Added to fix the warning
-    private static final long serialVersionUID = 1L;
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // If already logged in, redirect away from login page
+
+        // If already logged in, skip the login page
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             UserModel user = (UserModel) session.getAttribute("user");
             if ("admin".equals(user.getRole())) {
-                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                response.sendRedirect(request.getContextPath() + "/admindashboard");
             } else {
                 response.sendRedirect(request.getContextPath() + "/home");
             }
             return;
         }
-        // Forward to login.jsp
+
         request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
     }
 
@@ -47,10 +46,9 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String userEmail    = request.getParameter("userEmail").trim();
-        String userPassword = request.getParameter("userPassword").trim();
+        String userEmail = request.getParameter("userEmail") != null ? request.getParameter("userEmail").trim() : "";
+        String userPassword = request.getParameter("userPassword") != null ? request.getParameter("userPassword").trim() : "";
 
-        // Basic validation
         if (userEmail.isEmpty() || userPassword.isEmpty()) {
             request.setAttribute("errorMessage", "Please fill in all fields.");
             request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);
@@ -58,15 +56,14 @@ public class LoginServlet extends HttpServlet {
         }
 
         try (Connection conn = DBConfig.getConnection()) {
-            String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+
+            String sql = "SELECT * FROM users WHERE email = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, userEmail);
-            stmt.setString(2, userPassword);
-
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                // Build user model from DB
+            if (rs.next() && PasswordUtil.verify(userPassword, rs.getString("password"))) {
+
                 UserModel user = new UserModel();
                 user.setId(rs.getInt("id"));
                 user.setFullName(rs.getString("full_name"));
@@ -75,16 +72,15 @@ public class LoginServlet extends HttpServlet {
                 user.setStudentId(rs.getString("student_id"));
                 user.setRole(rs.getString("role"));
 
-                // Store in session
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
 
-                // Redirect based on role
                 if ("admin".equals(user.getRole())) {
-                    response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                    response.sendRedirect(request.getContextPath() + "/admindashboard");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/home");
                 }
+
             } else {
                 request.setAttribute("errorMessage", "Invalid email or password. Please try again.");
                 request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);

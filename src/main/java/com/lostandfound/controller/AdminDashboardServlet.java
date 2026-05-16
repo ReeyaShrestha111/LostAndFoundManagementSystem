@@ -21,12 +21,12 @@ import java.util.List;
 
 /**
  * AdminDashboardServlet - Admin-only dashboard
- * URL: /admin/dashboard
+ * URL: /admindashboard
  */
-@WebServlet("/admin/dashboard")
+@WebServlet("/admindashboard")
 public class AdminDashboardServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L; // ✅ Added to fix warning
+    private static final long serialVersionUID = 1L; // optional, silences warning
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,10 +38,8 @@ public class AdminDashboardServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
 
         UserModel user = (UserModel) session.getAttribute("user");
-        System.out.println(user.getRole());
         if (!"admin".equals(user.getRole())) {
             response.sendRedirect(request.getContextPath() + "/home");
             return;
@@ -101,7 +99,6 @@ public class AdminDashboardServlet extends HttpServlet {
         request.setAttribute("totalItems", totalItems);
         request.setAttribute("pendingItems", pendingItems);
         request.getRequestDispatcher("/WEB-INF/pages/admin_dashboard.jsp").forward(request, response);
-        
     }
 
     @Override
@@ -128,6 +125,6 @@ public class AdminDashboardServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+        response.sendRedirect(request.getContextPath() + "/admindashboard");
     }
 }
