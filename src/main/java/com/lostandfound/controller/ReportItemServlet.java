@@ -30,6 +30,8 @@ import java.sql.PreparedStatement;
 )
 public class ReportItemServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L; // ✅ Added to fix warning
+
     // Upload directory inside webapp
     private static final String UPLOAD_DIR = "uploads";
 

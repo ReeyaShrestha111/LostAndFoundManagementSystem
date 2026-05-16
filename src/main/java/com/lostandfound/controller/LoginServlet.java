@@ -22,6 +22,9 @@ import java.sql.ResultSet;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+    // ✅ Added to fix the warning
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

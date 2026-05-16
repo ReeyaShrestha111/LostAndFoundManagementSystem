@@ -2,7 +2,6 @@ package com.lostandfound.controller;
 
 import com.lostandfound.config.DBConfig;
 import com.lostandfound.model.ItemModel;
-import com.lostandfound.model.UserModel;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,6 +23,8 @@ import java.util.List;
  */
 @WebServlet("/browse")
 public class BrowseItemsServlet extends HttpServlet {
+
+    private static final long serialVersionUID = 1L; // ✅ best practice for Serializable classes
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
